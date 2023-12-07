@@ -1,0 +1,38 @@
+{
+    "name": "a50/mapper",
+    "description": "A50 Mapper",
+    "keywords": [
+        "a50"
+    ],
+    "homepage": "https://github.com/a50dev/mapper",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Siarhei Bautrukevich",
+            "email": "hello@bautrukevich.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "a50/container": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "A50\\Mapper\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "A50\\Mapper\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
