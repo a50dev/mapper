@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace A50\Mapper\Serializers;
 
+use A50\Mapper\AutonomousPropertySerializer;
 use Closure;
 use ReflectionClass;
 use ReflectionProperty;
@@ -55,21 +56,6 @@ final class ObjectSerializerUsingReflection implements Serializer
 
     public function serialize(mixed $object): array
     {
-        $match = match (true) {
-            \is_array($object) => $object = (object)$object,
-            \is_null($object) => null,
-            \is_scalar($object) => $object,
-            $object instanceof \DateTimeImmutable => $object->format('Y-m-d H:i:s'),
-            default => throw new \InvalidArgumentException('Argument must be an array or object'),
-        };
-
-        \var_dump($match);
-        die();
-
-        if ($match) {
-            return [$object];
-        }
-
         $reflection = new ReflectionClass($object);
         $properties = $reflection->getProperties();
 
@@ -86,8 +72,23 @@ final class ObjectSerializerUsingReflection implements Serializer
 
             [$propertyName, $typeName] = $this->getPropertyData($property);
 
+            if (\is_null($value)) {
+                $keyName = $this->keyFormatter->propertyNameToKey($propertyName);
+                $payload[$keyName] = null;
+                continue;
+            }
+
             $serializer = $this->getPropertySerializer($value, $typeName)();
             $serializedValue = $serializer->serialize($value, $this);
+
+            $isAutonomous = $serializer instanceof AutonomousPropertySerializer;
+
+            if ($isAutonomous) {
+                $keyName = $this->keyFormatter->propertyNameToKey($propertyName);
+                $payload[$keyName] = $serializedValue;
+
+                continue;
+            }
 
             if (\is_array($serializedValue)) {
                 foreach ($serializedValue as $key => $item) {
@@ -103,5 +104,13 @@ final class ObjectSerializerUsingReflection implements Serializer
         }
 
         return $payload;
+    }
+
+    public function withKeyFormatter(KeyFormatter $keyFormatter): Serializer
+    {
+        return new self(
+            $this->propertySerializers,
+            $keyFormatter
+        );
     }
 }

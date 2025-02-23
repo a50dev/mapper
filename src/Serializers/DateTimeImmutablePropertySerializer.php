@@ -18,6 +18,10 @@ final class DateTimeImmutablePropertySerializer implements PropertySerializer
 
     public function serialize(mixed $value, Serializer $serializer): mixed
     {
+        if (\is_null($value)) {
+            return null;
+        }
+
         Assert::isInstanceOf($value, DateTimeImmutable::class);
 
         return $value->format($this->format);
