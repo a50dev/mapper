@@ -12,7 +12,7 @@ use A50\Mapper\Serializer;
 final class DateTimeImmutablePropertySerializer implements PropertySerializer
 {
     public function __construct(
-        private readonly string $format = 'Y-m-d H:i:s'
+        private readonly string $format = DATE_ATOM
     ) {
     }
 
