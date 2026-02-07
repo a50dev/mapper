@@ -48,8 +48,6 @@ final class ObjectHydratorUsingReflection implements Hydrator
 
             $keyName = $this->keyFormatter->propertyNameToKey($propertyName);
 
-            $property->setAccessible(true);
-
             $rawValues = array_filter($data, static fn ($key) => str_starts_with($key, $keyName), ARRAY_FILTER_USE_KEY);
 
             $rawValue = \count($rawValues) > 0 ? $rawValues : $data[$keyName];
@@ -67,5 +65,13 @@ final class ObjectHydratorUsingReflection implements Hydrator
         }
 
         return $object;
+    }
+
+    public function withKeyFormatter(KeyFormatter $keyFormatter): Hydrator
+    {
+        return new self(
+            $this->propertyHydrators,
+            $keyFormatter,
+        );
     }
 }

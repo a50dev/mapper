@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace A50\Mapper\Tests\Unit;
 
+use A50\Mapper\Tests\Datasets\MessageWithNullableId;
 use DateTimeImmutable;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
@@ -55,7 +56,7 @@ final class HydratorTest extends TestCase
                     'id' => '1',
                     'published_status' => 1,
                     'payment_status' => 'paid',
-                    'created_at' => '2021-01-01 00:00:00',
+                    'created_at' => '2021-01-01T00:00:00+00:00'
                 ],
                 new WithScalarAndStatusEnum(
                     id: '1',
@@ -104,6 +105,17 @@ final class HydratorTest extends TestCase
                 ],
                 WithNullableValueObject::create(
                     Id::fromString('9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'),
+                    null,
+                ),
+            ],
+            'MessageWithNullableId' => [
+                MessageWithNullableId::class,
+                [
+                    'user_id' => '019c05d1-f6e0-746b-9eca-4b015c6267ed',
+                    'workspace_id' => null,
+                ],
+                MessageWithNullableId::create(
+                    Id::fromString('019c05d1-f6e0-746b-9eca-4b015c6267ed'),
                     null,
                 ),
             ],
