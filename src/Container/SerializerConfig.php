@@ -39,10 +39,10 @@ final class SerializerConfig
         return $this->propertySerializers;
     }
 
-    public function withPropertyHydrator(string $typeName, callable $propertyHydrator): self
+    public function withPropertySerializer(string $typeName, callable $propertySerializer): self
     {
         $new = clone $this;
-        $new->propertySerializers[$typeName] = $propertyHydrator;
+        $new->propertySerializers[$typeName] = $propertySerializer;
 
         return $new;
     }
